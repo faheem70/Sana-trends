@@ -3,6 +3,7 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const adminAuth = require("../middleware/adminAuth");
 const userAuth = require("../middleware/userAuth");
+const { notifyAdminOfOrder } = require("../config/mailer");
 
 const router = express.Router();
 
@@ -65,6 +66,9 @@ router.post("/", userAuth, async (req, res) => {
     });
 
     await order.save();
+    notifyAdminOfOrder(order).catch((err) => {
+      console.error(`Order email error: ${err.message}`);
+    });
     res.status(201).json(order);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });

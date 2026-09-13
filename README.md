@@ -94,6 +94,9 @@ Open `http://localhost:5173` for the store, and `http://localhost:5173/admin/log
    - `ADMIN_USERNAME`, `ADMIN_PASSWORD` — your admin login
    - `CLIENT_URL` — your deployed frontend URL
    - `FIREBASE_SERVICE_ACCOUNT_JSON` — the complete JSON contents of a Firebase Admin SDK service-account key
+   - `MAIL_HOST`, `MAIL_PORT`, `MAIL_SECURE` — SMTP server settings (for Gmail: `smtp.gmail.com`, `587`, `false`)
+   - `MAIL_USER`, `MAIL_PASSWORD` — SMTP sender address and app password
+   - `MAIL_FROM` — optional sender address; new-order notifications are sent to `faheemkh9670@gmail.com`
 6. Deploy. Once live, copy your backend URL, e.g. `https://sana-trends-backend.onrender.com`.
 7. Open Render's **Shell** tab for your service and run `npm run seed` once, to create your admin login and sample products.
 
