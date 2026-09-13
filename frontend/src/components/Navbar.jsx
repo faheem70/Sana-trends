@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import logo from '../assets/logo.png';
 
 export default function Navbar() {
   const { totalItems } = useCart();
@@ -20,8 +21,8 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 bg-paper/95 backdrop-blur border-b border-ink/10">
       <div className="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center gap-6">
-        <Link to="/" className="font-display italic text-2xl tracking-tight text-teal shrink-0">
-          Sana Trends
+        <Link to="/" aria-label="Sana Trends home" className="shrink-0 flex items-center">
+          <img src={logo} alt="Sana Trends" className="w-[108px] sm:w-[128px] h-14 object-contain" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-7 text-[15px] font-medium text-ink/80">
