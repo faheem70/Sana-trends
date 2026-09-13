@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sana Trends | Men's & Kids' Fashion</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: '#12181A',
+              paper: '#F7F4EE',
+              'paper-deep': '#EFEAE0',
+              teal: {
+                DEFAULT: '#0E3B3E',
+                mid: '#1C5B5E',
+                light: '#2F7377',
+              },
+              marigold: {
+                DEFAULT: '#E8A63B',
+                dark: '#C9862A',
+              },
+              berry: {
+                DEFAULT: '#A63A4B',
+                dark: '#872E3C',
+              },
+            },
+            fontFamily: {
+              display: ['Fraunces', 'serif'],
+              sans: ['Manrope', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: 'Manrope', sans-serif;
+        background-color: #f7f4ee;
+        color: #12181a;
+      }
+      .font-display {
+        font-family: 'Fraunces', serif;
+      }
+      /* hide scrollbar on the horizontal size strip, keep it functional */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
