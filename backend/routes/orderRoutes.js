@@ -1,7 +1,8 @@
-const express = require('express');
-const Order = require('../models/Order');
-const Product = require('../models/Product');
-const adminAuth = require('../middleware/adminAuth');
+const express = require("express");
+const Order = require("../models/Order");
+const Product = require("../models/Product");
+const adminAuth = require("../middleware/adminAuth");
+const userAuth = require("../middleware/userAuth");
 
 const router = express.Router();
 
@@ -10,19 +11,23 @@ function generateOrderNumber() {
   return `ST${Date.now().toString().slice(-6)}${rand}`;
 }
 
-// POST /api/orders  -> place a new order (guest checkout, Cash on Delivery)
-router.post('/', async (req, res) => {
+// POST /api/orders -> place an order for the signed-in customer
+router.post("/", userAuth, async (req, res) => {
   try {
     const { customer, items } = req.body;
 
     if (!customer || !items || items.length === 0) {
-      return res.status(400).json({ message: 'Customer details and items are required' });
+      return res
+        .status(400)
+        .json({ message: "Customer details and items are required" });
     }
 
-    const required = ['name', 'phone', 'address', 'city', 'state', 'pincode'];
+    const required = ["name", "phone", "address", "city", "state", "pincode"];
     for (const field of required) {
       if (!customer[field]) {
-        return res.status(400).json({ message: `Customer ${field} is required` });
+        return res
+          .status(400)
+          .json({ message: `Customer ${field} is required` });
       }
     }
 
@@ -33,7 +38,9 @@ router.post('/', async (req, res) => {
     for (const item of items) {
       const product = await Product.findById(item.product);
       if (!product) {
-        return res.status(400).json({ message: `Product not found: ${item.name || item.product}` });
+        return res
+          .status(400)
+          .json({ message: `Product not found: ${item.name || item.product}` });
       }
       const unitPrice = product.discountPrice || product.price;
       const qty = Number(item.qty) || 1;
@@ -43,60 +50,83 @@ router.post('/', async (req, res) => {
         name: product.name,
         price: unitPrice,
         qty,
-        size: item.size || '',
-        image: product.images[0] || '',
+        size: item.size || "",
+        image: product.images[0] || "",
       });
     }
 
     const order = new Order({
+      user: req.user.id,
       orderNumber: generateOrderNumber(),
       customer,
       items: verifiedItems,
       totalAmount,
-      paymentMethod: 'COD',
+      paymentMethod: "COD",
     });
 
     await order.save();
     res.status(201).json(order);
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// GET /api/orders/mine -> the signed-in customer's order history
+router.get("/mine", userAuth, async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user.id }).sort({
+      createdAt: -1,
+    });
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
 // GET /api/orders  (admin only) -> list all orders, newest first
-router.get('/', adminAuth, async (req, res) => {
+router.get("/", adminAuth, async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
 // GET /api/orders/track/:orderNumber -> customer can check their own order status
-router.get('/track/:orderNumber', async (req, res) => {
+router.get("/track/:orderNumber", async (req, res) => {
   try {
     const order = await Order.findOne({ orderNumber: req.params.orderNumber });
-    if (!order) return res.status(404).json({ message: 'Order not found' });
+    if (!order) return res.status(404).json({ message: "Order not found" });
     res.json(order);
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
 // PUT /api/orders/:id/status  (admin only) -> update order status
-router.put('/:id/status', adminAuth, async (req, res) => {
+router.put("/:id/status", adminAuth, async (req, res) => {
   try {
     const { status } = req.body;
-    const allowed = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+    const allowed = [
+      "pending",
+      "confirmed",
+      "shipped",
+      "delivered",
+      "cancelled",
+    ];
     if (!allowed.includes(status)) {
-      return res.status(400).json({ message: 'Invalid status value' });
+      return res.status(400).json({ message: "Invalid status value" });
     }
-    const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
-    if (!order) return res.status(404).json({ message: 'Order not found' });
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true },
+    );
+    if (!order) return res.status(404).json({ message: "Order not found" });
     res.json(order);
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 

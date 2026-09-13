@@ -12,6 +12,8 @@ import Cart from './pages/Cart.jsx';
 import Checkout from './pages/Checkout.jsx';
 import OrderSuccess from './pages/OrderSuccess.jsx';
 import TrackOrder from './pages/TrackOrder.jsx';
+import Account from './pages/Account.jsx';
+import Orders from './pages/Orders.jsx';
 
 import AdminLogin from './pages/admin/AdminLogin.jsx';
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
@@ -45,6 +47,8 @@ export default function App() {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
                 <Route path="/track-order" element={<TrackOrder />} />
+                <Route path="/account" element={<Account />} />
+                <Route path="/orders" element={<Orders />} />
                 <Route path="*" element={<Home />} />
               </Routes>
             </div>

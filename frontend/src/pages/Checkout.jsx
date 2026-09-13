@@ -1,23 +1,28 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import api from '../api/api.js';
 import { useCart } from '../context/CartContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Checkout() {
   const { cart, totalAmount, clearCart } = useCart();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [form, setForm] = useState({
-    name: '',
+    name: user?.name || '',
     phone: '',
-    email: '',
-    address: '',
-    city: '',
-    state: '',
-    pincode: '',
+    email: user?.email || '',
+    address: user?.address || '',
+    town: 'Phoolpur',
+    city: 'Azamgarh',
+    state: user?.state || '',
+    pincode: user?.pincode || '',
   });
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  if (!user) return <Navigate to="/account?redirect=/checkout" replace />;
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -72,10 +77,13 @@ export default function Checkout() {
           <input name="email" placeholder="Email (optional)" value={form.email} onChange={handleChange} className={inputClass} />
           <textarea name="address" placeholder="Full address *" value={form.address} onChange={handleChange} className={inputClass} rows={3} />
           <div className="grid grid-cols-2 gap-3">
-            <input name="city" placeholder="City *" value={form.city} onChange={handleChange} className={inputClass} />
-            <input name="state" placeholder="State *" value={form.state} onChange={handleChange} className={inputClass} />
+            <input name="town" value="Phoolpur" disabled className={`${inputClass} bg-ink/5 text-ink/50`} aria-label="Town" />
+            <input name="city" value="Azamgarh" disabled className={`${inputClass} bg-ink/5 text-ink/50`} aria-label="City" />
           </div>
-          <input name="pincode" placeholder="Pincode *" value={form.pincode} onChange={handleChange} className={inputClass} />
+          <div className="grid grid-cols-2 gap-3">
+            <input name="state" placeholder="State *" value={form.state} onChange={handleChange} className={inputClass} />
+            <input name="pincode" placeholder="Pincode *" value={form.pincode} onChange={handleChange} className={inputClass} />
+          </div>
 
           <div className="bg-marigold/15 border border-marigold/40 text-ink/80 text-sm px-4 py-3">
             Payment method: <strong>Cash on delivery</strong> — pay when your order arrives.

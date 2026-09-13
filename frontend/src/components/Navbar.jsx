@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Navbar() {
   const { totalItems } = useCart();
+  const { user } = useAuth();
   const [query, setQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
@@ -79,6 +81,22 @@ export default function Navbar() {
             </span>
           )}
         </Link>
+        <Link
+          to="/account"
+          aria-label={user ? 'My profile' : 'Log in'}
+          title={user ? 'My profile' : 'Log in'}
+          className="text-ink/70 hover:text-berry transition-colors p-1"
+        >
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <circle cx="12" cy="8" r="3.5" />
+            <path d="M4.5 21c.7-3.4 3.3-5.5 7.5-5.5s6.8 2.1 7.5 5.5" />
+          </svg>
+        </Link>
+        {user && (
+          <Link to="/orders" className="hidden sm:inline text-sm text-ink/70 hover:text-berry transition-colors">
+            Orders
+          </Link>
+        )}
       </div>
     </header>
   );

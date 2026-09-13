@@ -16,7 +16,7 @@ sana-trends/
 ├── backend/          # Express API
 │   ├── models/       # Product, Order, Admin (Mongoose schemas)
 │   ├── routes/       # /api/products, /api/orders, /api/auth
-│   ├── middleware/   # adminAuth (JWT protection)
+│   ├── middleware/   # adminAuth and userAuth JWT protection
 │   ├── seed.js       # creates admin account + 4 sample products
 │   └── server.js
 └── frontend/         # React storefront + admin dashboard
@@ -32,11 +32,13 @@ sana-trends/
 - Checkout with Cash on Delivery (no card/UPI needed)
 - Order confirmation with an order number
 - Track order status by order number (`/track-order`)
+- Email login and sign-up (mobile OTP coming soon)
+- Customer profile with saved address and order history
 
 ### Admin features (`/admin/login`)
 - Secure login (JWT)
 - Add / edit / delete products (name, price, discount price, category, sizes, images, stock, featured)
-- View all orders, expand to see items, update status (pending → confirmed → shipped → delivered)
+- View all orders, expand to see items, update order status (pending → confirmed → shipped → delivered)
 - Dashboard with quick stats
 
 ---
@@ -86,13 +88,14 @@ Open `http://localhost:5173` for the store, and `http://localhost:5173/admin/log
 2. Go to https://render.com, sign up/login, click **New + → Web Service**.
 3. Connect your GitHub repo, set **Root Directory** to `backend`.
 4. Build Command: `npm install` — Start Command: `npm start`.
-5. Add Environment Variables (from `backend/.env.example`):
+5. Add Environment Variables:
    - `MONGO_URI` — your Atlas connection string
    - `JWT_SECRET` — any long random string
    - `ADMIN_USERNAME`, `ADMIN_PASSWORD` — your admin login
-   - `CLIENT_URL` — leave blank for now, you'll fill it after deploying the frontend
+   - `CLIENT_URL` — your deployed frontend URL
+   - `FIREBASE_SERVICE_ACCOUNT_JSON` — the complete JSON contents of a Firebase Admin SDK service-account key
 6. Deploy. Once live, copy your backend URL, e.g. `https://sana-trends-backend.onrender.com`.
-7. Open Render's **Shell** tab for your service and run `npm run seed` once, to create your admin account and sample products.
+7. Open Render's **Shell** tab for your service and run `npm run seed` once, to create your admin login and sample products.
 
 > Note: Render's free tier "sleeps" after inactivity — the first request after idle time can take ~30–60 seconds to wake up. This is normal on the free plan.
 
@@ -105,10 +108,18 @@ Open `http://localhost:5173` for the store, and `http://localhost:5173/admin/log
 5. Deploy. You'll get a URL like `https://sana-trends.vercel.app`.
 
 ### Step 4 — Connect them
-1. Go back to Render → your backend service → Environment → set `CLIENT_URL` to your Vercel URL (e.g. `https://sana-trends.vercel.app`) so CORS allows requests from your live site.
-2. Redeploy the backend (Render redeploys automatically when you change env vars).
+1. Set `CLIENT_URL` on Render to your Vercel URL so CORS allows requests from your live site.
+2. Redeploy the backend after changing environment variables.
 
 Your store is now live! Visit your Vercel URL to shop, and `<your-vercel-url>/admin/login` to manage products and orders.
+
+### Future Firebase phone login setup
+1. In the Firebase console, open **Authentication → Sign-in method** and enable **Phone**.
+2. Add your local and deployed frontend domains under **Authentication → Settings → Authorized domains**.
+3. In **Project settings → Service accounts**, create a private key for the Firebase Admin SDK.
+4. Add the downloaded JSON as `FIREBASE_SERVICE_ACCOUNT_JSON` on the backend. Keep it private and never commit the JSON file.
+
+The profile always stores `Phoolpur` as the town and `Azamgarh` as the city. These values are enforced by the backend and cannot be changed through an API request.
 
 ---
 
@@ -122,11 +133,8 @@ Go to `/admin/login`, log in, then **Products → Add Product**:
 
 ---
 
-## 5. Good next upgrades (not included, to keep this simple)
+## 5. Good next upgrades
 - Online payments (Razorpay/UPI) if you want card/UPI in addition to COD
-- Customer accounts & order history login
 - Direct image upload from the admin panel (currently uses image URLs)
 - SMS/WhatsApp order notifications
 - Product reviews & ratings
-
-Let me know if you'd like any of these added.

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import api from '../api/api.js';
 
 const statusSteps = ['pending', 'confirmed', 'shipped', 'delivered'];
 
 export default function TrackOrder() {
-  const [orderNumber, setOrderNumber] = useState('');
+  const [searchParams] = useSearchParams();
+  const [orderNumber, setOrderNumber] = useState(searchParams.get('order') || '');
   const [order, setOrder] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);

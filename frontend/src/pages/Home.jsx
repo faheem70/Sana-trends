@@ -105,7 +105,7 @@ export default function Home() {
         </Link>
         <Link to="/shop?category=kids" className="relative rounded-sm overflow-hidden h-64 group">
           <img
-            src="https://images.unsplash.com/photo-1519457851415-6ba2fdcc8ea4?w=900"
+            src="https://www.inayahfashion.com/cdn/shop/files/INB5.png?v=1781162183&width=1100"
             alt="Kids' collection"
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
           />
