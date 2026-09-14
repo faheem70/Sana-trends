@@ -8,6 +8,7 @@ export default function Navbar() {
   const { user } = useAuth();
   const [query, setQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   function handleSearch(e) {
@@ -15,16 +16,17 @@ export default function Navbar() {
     if (!query.trim()) return;
     navigate(`/shop?search=${encodeURIComponent(query)}`);
     setSearchOpen(false);
+    setMenuOpen(false);
   }
 
   return (
     <header className="sticky top-0 z-40 bg-paper/95 backdrop-blur border-b border-ink/10">
-      <div className="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-5 md:px-8 min-h-16 flex flex-wrap items-center gap-3 sm:gap-6 py-3 md:py-0">
         <Link to="/" aria-label="Sana Trends home" className="shrink-0 flex items-center">
-          <span className="mr-2 flex h-9 w-9 items-center justify-center rounded-full border-2 border-berry bg-teal text-[11px] font-extrabold tracking-[0.08em] text-white">
+          <span className="mr-2 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border-2 border-berry bg-teal text-[10px] sm:text-[11px] font-extrabold tracking-[0.08em] text-white">
             ST
           </span>
-          <span className="font-display italic text-2xl tracking-tight text-teal whitespace-nowrap">
+          <span className="font-display italic text-xl sm:text-2xl tracking-tight text-teal whitespace-nowrap">
             Sana <span className="font-sans not-italic font-extrabold uppercase text-berry tracking-[0.08em]">Trends</span>
           </span>
         </Link>
@@ -44,9 +46,9 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        <div className="flex-1" />
+        <div className="flex-1 min-w-0" />
 
-        <div className="relative flex items-center">
+        <div className={`${searchOpen ? 'order-last basis-full md:order-none md:basis-auto' : ''} relative flex items-center`}>
           {searchOpen ? (
             <form onSubmit={handleSearch} className="flex items-center">
               <input
@@ -56,7 +58,7 @@ export default function Navbar() {
                 onChange={(e) => setQuery(e.target.value)}
                 onBlur={() => !query && setSearchOpen(false)}
                 placeholder="Search products"
-                className="w-40 md:w-56 border-b border-ink/30 bg-transparent px-1 py-1 text-sm focus:outline-none focus:border-berry"
+                className="w-full md:w-56 border-b border-ink/30 bg-transparent px-1 py-2 text-sm focus:outline-none focus:border-berry"
               />
             </form>
           ) : (
@@ -97,12 +99,32 @@ export default function Navbar() {
             <path d="M4.5 21c.7-3.4 3.3-5.5 7.5-5.5s6.8 2.1 7.5 5.5" />
           </svg>
         </Link>
+        <button
+          type="button"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+          className="md:hidden text-ink/70 hover:text-berry transition-colors p-1"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+            {menuOpen ? <path d="m6 6 12 12M18 6 6 18" /> : <><path d="M4 7h16M4 12h16M4 17h16" /></>}
+          </svg>
+        </button>
         {user && (
           <Link to="/orders" className="hidden sm:inline text-sm text-ink/70 hover:text-berry transition-colors">
             Orders
           </Link>
         )}
       </div>
+      {menuOpen && (
+        <nav className="md:hidden border-t border-ink/10 px-4 sm:px-5 py-3 space-y-1 text-sm font-medium text-ink/80">
+          <Link onClick={() => setMenuOpen(false)} to="/shop?category=men" className="block py-2 hover:text-berry">Men</Link>
+          <Link onClick={() => setMenuOpen(false)} to="/shop?category=kids" className="block py-2 hover:text-berry">Kids</Link>
+          <Link onClick={() => setMenuOpen(false)} to="/shop" className="block py-2 hover:text-berry">Everything</Link>
+          <Link onClick={() => setMenuOpen(false)} to="/track-order" className="block py-2 hover:text-berry">Track order</Link>
+          {user && <Link onClick={() => setMenuOpen(false)} to="/orders" className="block py-2 hover:text-berry">Orders</Link>}
+        </nav>
+      )}
     </header>
   );
 }

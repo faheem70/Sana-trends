@@ -9,8 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+      rel="stylesheet" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -48,10 +47,17 @@
       html {
         scroll-behavior: smooth;
       }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
       body {
         font-family: 'Manrope', sans-serif;
         background-color: #f7f4ee;
         color: #12181a;
+        margin: 0;
+        overflow-x: hidden;
       }
       .font-display {
         font-family: 'Fraunces', serif;
