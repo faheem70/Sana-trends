@@ -76,11 +76,11 @@ export default function Checkout() {
           <input name="phone" placeholder="Phone number *" value={form.phone} onChange={handleChange} className={inputClass} />
           <input name="email" placeholder="Email (optional)" value={form.email} onChange={handleChange} className={inputClass} />
           <textarea name="address" placeholder="Full address *" value={form.address} onChange={handleChange} className={inputClass} rows={3} />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input name="town" value="Phoolpur" disabled className={`${inputClass} bg-ink/5 text-ink/50`} aria-label="Town" />
             <input name="city" value="Azamgarh" disabled className={`${inputClass} bg-ink/5 text-ink/50`} aria-label="City" />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input name="state" placeholder="State *" value={form.state} onChange={handleChange} className={inputClass} />
             <input name="pincode" placeholder="Pincode *" value={form.pincode} onChange={handleChange} className={inputClass} />
           </div>

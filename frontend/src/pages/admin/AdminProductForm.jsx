@@ -93,12 +93,12 @@ export default function AdminProductForm() {
         <input name="name" placeholder="Product Name *" value={form.name} onChange={handleChange} className="w-full border rounded px-3 py-2" />
         <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} className="w-full border rounded px-3 py-2" rows={3} />
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <input name="price" type="number" placeholder="Price (₹) *" value={form.price} onChange={handleChange} className="border rounded px-3 py-2" />
           <input name="discountPrice" type="number" placeholder="Discount Price (optional)" value={form.discountPrice} onChange={handleChange} className="border rounded px-3 py-2" />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <select name="category" value={form.category} onChange={handleChange} className="border rounded px-3 py-2">
             <option value="men">Men</option>
             <option value="kids">Kids</option>

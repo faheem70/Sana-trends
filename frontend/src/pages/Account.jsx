@@ -51,11 +51,11 @@ export default function Account() {
           <input value={profile?.phone || ''} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} placeholder="Mobile number" className="w-full border border-ink/15 px-3 py-3 text-sm" />
           <p className="text-xs text-ink/50">Mobile number changes need OTP verification. Mobile OTP is coming soon.</p>
           <textarea required value={profile?.address || ''} onChange={(e) => setProfile({ ...profile, address: e.target.value })} placeholder="Address" rows={3} className="w-full border border-ink/15 px-3 py-3 text-sm" />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input value="Phoolpur" disabled className="w-full border border-ink/10 bg-ink/5 px-3 py-3 text-sm text-ink/50" aria-label="Town" />
             <input value="Azamgarh" disabled className="w-full border border-ink/10 bg-ink/5 px-3 py-3 text-sm text-ink/50" aria-label="City" />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input value={profile?.state || ''} onChange={(e) => setProfile({ ...profile, state: e.target.value })} placeholder="State" className="w-full border border-ink/15 px-3 py-3 text-sm" />
             <input value={profile?.pincode || ''} onChange={(e) => setProfile({ ...profile, pincode: e.target.value })} placeholder="Pincode" className="w-full border border-ink/15 px-3 py-3 text-sm" />
           </div>
